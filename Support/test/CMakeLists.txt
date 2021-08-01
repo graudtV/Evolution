@@ -1,0 +1,3 @@
+add_catch2_unit_test_target(support
+	test_tiled_map
+)
