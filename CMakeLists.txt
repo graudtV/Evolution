@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # -------------------------------------------
-# Support cmake functions
+# cmake helper functions
 # -------------------------------------------
 
 function(add_catch2_unit_test_target
@@ -32,8 +32,11 @@ endfunction()
 
 project(Evolution)
 
+# Evo subprojects
 add_subdirectory(Support)
+add_subdirectory(Snake)
 
+# Test subtargets
 add_custom_target(check DEPENDS
 	check-support
 )
