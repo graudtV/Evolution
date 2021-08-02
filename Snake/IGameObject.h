@@ -28,9 +28,7 @@ public:
 	using CoordArray = std::vector<Coord>;
 
 	const CoordArray& visible_segments() const { return m_visible_segments; }
-	const CoordArray& staging_segments() const { return m_staging_segments;}
-
-protected:
+	const CoordArray& staging_segments() const { return m_staging_segments; }
 	CoordArray& staging_segments() { return m_staging_segments; }
 
 private:
@@ -43,7 +41,7 @@ private:
 	friend class GameModel;
 };
 
-class IGameObject : public GameObjectLocation {
+class IGameObject {
 public:
 	explicit IGameObject(GameModel& game_model) :
 		m_game_model(game_model) {}
@@ -51,11 +49,11 @@ public:
 	virtual ~IGameObject() {}
 
 	GameModel& game_model() { return m_game_model; }
-	const GameObjectLocation& location() { return m_location; }
+	const GameObjectLocation& location() const { return m_location; }
 
 	/* Runs some logic to make decision. Result should be
-	 * written is m_location.staging_segments() */
-	virtual void make_move(CoordArray *staging_segments) = 0;
+	 * written is m_staging_segments */
+	virtual void make_move() = 0;
 
 private:
 	GameModel& m_game_model;
