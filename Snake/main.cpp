@@ -1,5 +1,4 @@
-// #include "Snake.h"
-#include "ISnakeKernel.h"
+#include "Snake.h"
 #include <iostream>
 
 int main()

@@ -9,8 +9,7 @@ class ISnakeKernel;
 
 class Snake : public IGameObject {
 public:
-	explicit Snake(GameModel& game_model) :
-		IGameObject(game_model), m_kernel(nullptr) {}
+	Snake() : m_kernel(nullptr) {}
 
 	void attach_kernel(ISnakeKernel& kernel);
 	void detach_kernel();

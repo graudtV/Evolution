@@ -16,8 +16,8 @@ public:
 	bool is_attached_to_snake() const { return m_snake != nullptr; }
 	Snake *snake() { return m_snake; }
 
-	GameModel *game_model()
-		{ return is_attached_to_snake() ? &m_snake->game_model() : nullptr; }
+	const TiledGameModel *game_model() const
+		{ return is_attached_to_snake() ? m_snake->game_model() : nullptr; }
 
 private:
 	Snake *m_snake = nullptr;
