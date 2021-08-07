@@ -9,6 +9,9 @@
 namespace evo {
 namespace snake {
 
+class ICollisionResolver;
+class IGameFinalizer;
+
 class TiledGameModel : public IGameModelNotifications {
 public:
 	class Error;
@@ -16,7 +19,7 @@ public:
 
 	using GameMap = TiledMap<IGameObject *>;
 
-	TiledGameModel(size_t height, size_t width) : m_map(height, width) {}
+	TiledGameModel(size_t height, size_t width, ICollisionResolver *resolver, IGameFinalizer *finalizer);
 
 	GameMap& game_map() { return m_map; }
 	const GameMap& game_map() const { return m_map; }
@@ -24,7 +27,7 @@ public:
 	GameObjectLocation& location_of(IGameObject& object);
 	const GameObjectLocation& location_of(const IGameObject& object) const;
 
-	/* read-only list of game objects */
+	/* read-only list of all game objects */
 	auto objects() const { return m_locations | boost::adaptors::map_keys; }
 
 	void add_object(IGameObject *object, const CoordArray& initial_location);
@@ -32,10 +35,17 @@ public:
 
 	void start_game();
 
+	bool is_running() const { return m_is_model_running; }
+
 private:
+	ICollisionResolver& m_collision_resolver;
+	IGameFinalizer& m_finalizer;
 	GameMap m_map;
 	bool m_is_model_running = false;
 	std::unordered_map<IGameObject *, GameObjectLocation> m_locations;
+
+	void move_game_objects();
+	void update_objects_visible_segments();
 };
 
 /* Base class for all TiledGameModel errors */

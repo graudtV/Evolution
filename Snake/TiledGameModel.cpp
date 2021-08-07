@@ -1,9 +1,21 @@
 #include "TiledGameModel.h"
 #include "IGameObject.h"
+#include "ICollisionResolver.h"
+#include "IGameFinalizer.h"
 #include <cassert>
 
 namespace evo {
 namespace snake {
+
+TiledGameModel::TiledGameModel(size_t height, size_t width,
+		ICollisionResolver *resolver, IGameFinalizer *finalizer) :
+	m_collision_resolver(*resolver),
+	m_finalizer(*finalizer),
+	m_map(height, width)
+{
+	assert(resolver != nullptr && "resolver must be a valid pointer");
+	assert(finalizer != nullptr && "finalizer must be a valid pointer");
+}
 
 GameObjectLocation&
 TiledGameModel::location_of(IGameObject& object)
@@ -47,6 +59,7 @@ void TiledGameModel::add_object(IGameObject *object, const CoordArray& initial_l
 	);
 
 	object->m_game_model = this;
+	notify_on_object_attachment(*this, *object);
 }
 
 void TiledGameModel::kill_object(IGameObject& object)
@@ -64,6 +77,48 @@ void TiledGameModel::kill_object(IGameObject& object)
 
 	m_locations.erase(&object);
 	object.m_game_model = nullptr;
+	notify_on_object_kill(*this, object);
+}
+
+void TiledGameModel::start_game()
+{
+	assert(m_is_model_running == false && "game is already running");
+	m_is_model_running = true;
+
+	notify_on_game_start(*this);
+
+	while (m_is_model_running) {
+		move_game_objects();
+		notify_on_all_objects_moved(*this);
+		m_collision_resolver.resolve_collisions(*this);
+		update_objects_visible_segments();
+		notify_on_collisions_resolved(*this);
+		m_is_model_running = !m_finalizer.is_game_finished(*this);
+	}
+
+	notify_on_game_finish(*this);
+}
+
+void TiledGameModel::move_game_objects()
+{
+	std::for_each(m_locations.begin(), m_locations.end(),
+		[](auto&& elt) {
+			auto& object = *elt.first;
+			auto& location = elt.second;
+
+			object.make_move(&location.staging_segments());
+		}
+	);	
+}
+
+void TiledGameModel::update_objects_visible_segments()
+{
+	auto&& locations = m_locations | boost::adaptors::map_values;
+	std::for_each(locations.begin(), locations.end(),
+		[](GameObjectLocation& location) {
+			location.update_visible_segments();
+		}
+	);
 }
 
 } // snake namespace end
