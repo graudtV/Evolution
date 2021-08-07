@@ -5,11 +5,11 @@ find_package(Boost REQUIRED)
 add_executable(snake)
 
 target_sources(snake PRIVATE
+	Abstract/IGameModelNotifications.cpp
+	Abstract/TiledGameModel.cpp
 	main.cpp
-	IGameModelNotifications.cpp
 	ISnakeKernel.cpp
 	Snake.cpp
-	TiledGameModel.cpp
 )
 
 target_include_directories(snake PRIVATE

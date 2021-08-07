@@ -1,5 +1,5 @@
 #include "Snake.h"
-#include "TiledGameModel.h"
+#include "Abstract/TiledGameModel.h"
 #include <iostream>
 
 int main()

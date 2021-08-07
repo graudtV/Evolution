@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IGameObject.h"
+#include "Abstract/IGameObject.h"
 
 namespace evo {
 namespace snake {
