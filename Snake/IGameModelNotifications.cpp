@@ -7,7 +7,7 @@ namespace snake {
 void IGameModelNotifications::add_observer(IGameModelObserver *observer)
 {
 	assert(std::find(m_observers.begin(), m_observers.end(), observer)
-		== m_observers.end() && "trying to add observer which is already added");
+		== m_observers.end() && "trying to add observer which has been already added");
 	m_observers.push_back(observer);
 }
 
@@ -18,7 +18,7 @@ void IGameModelNotifications::remove_observer(IGameModelObserver *observer)
 	);
 }
 
-void IGameModelNotifications::notify_on_object_attachment(TiledGameModel& model, IGameObject& object)
+void IGameModelNotifications::notify_on_object_attachment(const TiledGameModel& model, const IGameObject& object) const
 {
 	std::for_each(m_observers.begin(), m_observers.end(),
 		[&](IGameModelObserver *observer) {
@@ -27,7 +27,16 @@ void IGameModelNotifications::notify_on_object_attachment(TiledGameModel& model,
 	);
 }
 
-void IGameModelNotifications::notify_on_game_start(TiledGameModel& model)
+void IGameModelNotifications::notify_on_object_kill(const TiledGameModel& model, const IGameObject& object) const
+{
+	std::for_each(m_observers.begin(), m_observers.end(),
+		[&](IGameModelObserver *observer) {
+			observer->on_object_kill(model, object);
+		}
+	);
+}
+
+void IGameModelNotifications::notify_on_game_start(const TiledGameModel& model) const
 {
 	std::for_each(m_observers.begin(), m_observers.end(),
 		[&](IGameModelObserver *observer) {
@@ -36,29 +45,29 @@ void IGameModelNotifications::notify_on_game_start(TiledGameModel& model)
 	);
 }
 
-void IGameModelNotifications::notify_on_object_move(TiledGameModel& model, IGameObject& object)
-{
-	std::for_each(m_observers.begin(), m_observers.end(),
-		[&](IGameModelObserver *observer) {
-			observer->on_object_move(model, object);
-		}
-	);
-}
-
-void IGameModelNotifications::notify_on_cycle_end(TiledGameModel& model)
-{
-	std::for_each(m_observers.begin(), m_observers.end(),
-		[&](IGameModelObserver *observer) {
-			observer->on_cycle_end(model);
-		}
-	);
-}
-
-void IGameModelNotifications::notify_on_game_finish(TiledGameModel& model)
+void IGameModelNotifications::notify_on_game_finish(const TiledGameModel& model) const
 {
 	std::for_each(m_observers.begin(), m_observers.end(),
 		[&](IGameModelObserver *observer) {
 			observer->on_game_finish(model);
+		}
+	);
+}
+
+void IGameModelNotifications::notify_on_all_objects_moved(const TiledGameModel& model) const
+{
+	std::for_each(m_observers.begin(), m_observers.end(),
+		[&](IGameModelObserver *observer) {
+			observer->on_all_objects_moved(model);
+		}
+	);
+}
+
+void IGameModelNotifications::notify_on_collisions_resolved(const TiledGameModel& model) const
+{
+	std::for_each(m_observers.begin(), m_observers.end(),
+		[&](IGameModelObserver *observer) {
+			observer->on_collisions_resolved(model);
 		}
 	);
 }

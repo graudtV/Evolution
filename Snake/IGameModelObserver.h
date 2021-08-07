@@ -8,28 +8,17 @@ class IGameObject;
 
 class IGameModelObserver {
 public:
-	/* called each time new object is added to TiledGameModel with
-	 * TiledGameModel::add_object(). That object is passed as argument */
-	virtual void on_object_attachment(TiledGameModel& model, IGameObject& object) {}
+	virtual ~IGameModelObserver() {}
 
-	/* called then game starts running */
-	virtual void on_game_start(TiledGameModel& model) {}
+	virtual void on_object_attachment(const TiledGameModel& model, const IGameObject& object) {}
+	virtual void on_object_kill(const TiledGameModel& model, const IGameObject& object) {}
 
-	/* called each time after IGameObject::make_move() is invoked for
-	 * some object. That object is passed as argument */
-	virtual void on_object_move(TiledGameModel& model, IGameObject& object) {}
+	virtual void on_game_start(const TiledGameModel& model) {}
+	virtual void on_game_finish(const TiledGameModel& model) {}
 
-	/* called then IGameObject::make_move() was invoked for all objects */
-	virtual void on_cycle_end(TiledGameModel& model) {}
-
-	/* called then game is stopped, but previously was running */
-	virtual void on_game_finish(TiledGameModel& model) {}
+	virtual void on_all_objects_moved(const TiledGameModel& model) {}
+	virtual void on_collisions_resolved(const TiledGameModel& model) {}
 };
-
-// TODO
-// class IGameModelReadonlyObserver() : public IGameModelObserver {
-// 
-// }
 
 } // snake namespace end
 } // evo namespace end

@@ -21,16 +21,9 @@ public:
 	const GameObjectLocation& location_of(const IGameObject& object) const;
 
 	void add_object(IGameObject *object, const CoordArray& initial_location);
+	void kill_object(IGameObject& object);
 
 	void start_game();
-
-	/* Should be invoked from some game model observer to stop game.
-	 * Then invoked, TiledGameModel completes all pending events, invokes
-	 * on_game_finish() for each observers and returns from start_game()
-	 * (if no observer restarted the game) */
-	void finish_game();
-
-	bool is_running() const { return m_is_model_running; }
 
 private:
 	GameMap m_map;
