@@ -2,6 +2,7 @@
 
 #include "game_defs.h"
 #include "IGameModelNotifications.h"
+#include "IGameObject.h"
 #include "Support/TiledMap.h"
 #include <unordered_map>
 
@@ -26,7 +27,9 @@ public:
 
 	const ObjectArray& objects() const { return m_objects; }
 
-	void add_object(IGameObject *object, const CoordArray& initial_location);
+	template <class CoordRange>
+	void add_object(IGameObject *object, CoordRange&& initial_location);
+
 	void kill_object(IGameObject& object);
 
 	void start_game();
@@ -56,3 +59,5 @@ public:
 
 } // snake namespace end
 } // evo namespace end
+
+#include "TiledGameModelImpl.h"

@@ -10,6 +10,7 @@ target_sources(snake PRIVATE
 	main.cpp
 	ISnakeKernel.cpp
 	Snake.cpp
+	SnakeGameCollisionResolver.cpp
 )
 
 target_include_directories(snake PRIVATE

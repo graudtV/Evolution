@@ -19,9 +19,9 @@ public:
 	const TiledGameModel *game_model() const
 		{ return is_attached_to_snake() ? m_snake->game_model() : nullptr; }
 
+	virtual SnakeDirection make_decision() = 0;
 private:
 	Snake *m_snake = nullptr;
-
 	friend class Snake;
 };
 

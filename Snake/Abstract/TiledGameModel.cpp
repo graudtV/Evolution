@@ -17,30 +17,6 @@ TiledGameModel::TiledGameModel(size_t height, size_t width,
 	assert(finalizer != nullptr && "finalizer must be a valid pointer");
 }
 
-/* If initial_location overlays some previously added object location,
- * when BadLocationError is thrown, and TiledGameModel is in
- * unspecified state (base exception guarantee), game object
- * remains unchanged */
-void TiledGameModel::add_object(IGameObject *object, const CoordArray& initial_location)
-{
-	assert(object != nullptr && "object must be a valid pointer");
-	assert(object->game_model() == nullptr && "object is already attached to some game");
-
-	std::for_each(initial_location.begin(), initial_location.end(),
-		[this, object](Coord coord) {
-			auto& tile = m_map[coord.row][coord.column];
-			if (tile) {
-				throw BadLocationError("TiledGameModel::add_object: "
-					"trying to place new object on already occupied position");
-			}
-			tile = object;
-		}
-	);
-
-	object->m_game_model = this;
-	notify_on_object_attachment(*this, *object);
-}
-
 void TiledGameModel::kill_object(IGameObject& object)
 {
 	assert(object.game_model() == this && "object is not attached to this game model");

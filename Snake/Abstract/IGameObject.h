@@ -11,10 +11,6 @@ class IGameObject {
 public:
 	virtual ~IGameObject() {}
 
-	/* Object can make some stuff to change it location internally.
-	 * The visible_location() of object, accessible throw TiledGameModel
-	 * interface, doesn't change. The latter is update by ICollisionResolver,
-	 * when all game object make move */
 	virtual void make_move() = 0;
 
 	const TiledGameModel *game_model() const { return m_game_model; }
