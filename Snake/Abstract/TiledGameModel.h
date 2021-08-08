@@ -3,7 +3,7 @@
 #include "game_defs.h"
 #include "IGameModelNotifications.h"
 #include "IGameObject.h"
-#include "Support/TiledMap.h"
+#include "Support/TiledMap/TiledMap.h"
 #include <unordered_map>
 
 namespace evo {

@@ -1,9 +1,12 @@
 #pragma once
 
 #include "Abstract/ICollisionResolver.h"
+#include "Support/TiledMap/TiledMap.h"
 
 namespace evo {
 namespace snake {
+
+class IGameObject;
 
 /* Collision resolver for snake-only game.
  * If there are any other objects in game model except
@@ -20,7 +23,12 @@ namespace snake {
  */
 class SnakeGameCollisionResolver : public ICollisionResolver {
 public:
+    SnakeGameCollisionResolver(size_t map_height, size_t map_width) :
+        m_collision_map(map_height, map_width) {}
+
 	void resolve_collisions(TiledGameModel& model) override;
+private:
+    TiledMap<std::vector<IGameObject *>> m_collision_map;
 };
 
 } // snake namespace end

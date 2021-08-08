@@ -3,6 +3,7 @@
 #include "ProxyRow.h"
 #include "TiledMapTraits.h"
 // #include "RegionIterator.h"
+#include <type_traits>
 
 namespace evo {
 

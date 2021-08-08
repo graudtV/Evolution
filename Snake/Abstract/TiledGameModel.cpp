@@ -21,7 +21,7 @@ void TiledGameModel::kill_object(IGameObject& object)
 {
 	assert(object.game_model() == this && "object is not attached to this game model");
 
-	// it could be refactored, but I'm not sure it will
+	// TODO: it could be refactored, but I'm not sure if it will
 	for (size_t row = 0; row < m_map.height(); ++row)
 		for (size_t column = 0; column < m_map.width(); ++column) {
 			auto& tile = m_map[row][column];

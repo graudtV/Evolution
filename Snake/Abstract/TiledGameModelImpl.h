@@ -18,6 +18,7 @@ void TiledGameModel::add_object(IGameObject *object, CoordRange&& initial_locati
 	using RangeValueType = typename std::iterator_traits<
 		typename boost::range_iterator<CoordRange>::type
 	>::value_type;
+
 	static_assert(std::is_convertible<RangeValueType, Coord>::value,
 		"expected a range of coordinates"
 	);

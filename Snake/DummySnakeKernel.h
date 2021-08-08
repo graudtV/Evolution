@@ -5,7 +5,7 @@
 namespace evo {
 namespace snake {
 
-/* Just always runs up */
+/* Just always runs in one direction */
 class DummySnakeKernel : public ISnakeKernel {
 public:
 	SnakeDirection make_decision() override { return SnakeDirection::eUp; }
