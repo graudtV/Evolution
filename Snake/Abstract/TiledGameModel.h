@@ -1,10 +1,9 @@
 #pragma once
 
+#include "game_defs.h"
 #include "IGameModelNotifications.h"
-#include "GameObjectLocation.h"
 #include "Support/TiledMap.h"
 #include <unordered_map>
-#include <boost/range/adaptors.hpp>
 
 namespace evo {
 namespace snake {
@@ -18,17 +17,14 @@ public:
 	class BadLocationError;
 
 	using GameMap = TiledMap<IGameObject *>;
+	using ObjectArray = std::vector<IGameObject *>;
 
 	TiledGameModel(size_t height, size_t width, ICollisionResolver *resolver, IGameFinalizer *finalizer);
 
 	GameMap& game_map() { return m_map; }
 	const GameMap& game_map() const { return m_map; }
 
-	GameObjectLocation& location_of(IGameObject& object);
-	const GameObjectLocation& location_of(const IGameObject& object) const;
-
-	/* read-only list of all game objects */
-	auto objects() const { return m_locations | boost::adaptors::map_keys; }
+	const ObjectArray& objects() const { return m_objects; }
 
 	void add_object(IGameObject *object, const CoordArray& initial_location);
 	void kill_object(IGameObject& object);
@@ -41,11 +37,10 @@ private:
 	ICollisionResolver& m_collision_resolver;
 	IGameFinalizer& m_finalizer;
 	GameMap m_map;
+	ObjectArray m_objects;
 	bool m_is_model_running = false;
-	std::unordered_map<IGameObject *, GameObjectLocation> m_locations;
 
 	void move_game_objects();
-	void update_objects_visible_segments();
 };
 
 /* Base class for all TiledGameModel errors */
