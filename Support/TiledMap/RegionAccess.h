@@ -71,6 +71,7 @@ public:
 	ConstIterator cbegin() const { return detail::make_region_begin<const TiledMap>(*this); }
 	ConstIterator cend() const { return detail::make_region_end<const TiledMap>(*this); }
 
+	void clear();
 private:
 	StorageTypeRef m_data;
 	size_t m_row, m_column, m_height, m_width;

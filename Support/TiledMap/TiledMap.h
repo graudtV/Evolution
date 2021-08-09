@@ -108,6 +108,7 @@ public:
 	ConstIterator cbegin() const { return access_whole().begin(); }
 	ConstIterator cend() const { return access_whole().end(); }
 
+	void clear() { access_whole().clear(); }
 private:
 	StorageType m_data;
 };

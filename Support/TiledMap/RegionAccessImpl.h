@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Support/debug.h"
+#include <algorithm>
 
 namespace evo {
 
@@ -20,5 +21,10 @@ RegionAccess<TiledMap>::operator [](size_t row) const
 	return ProxyRow(m_data[row + m_row].data() + m_column
 		ON_DEBUG(, m_width));
 }
+
+template <class TiledMap>
+void RegionAccess<TiledMap>::clear()
+	{ std::fill(begin(), end(), TileType()); }
+
 
 } // evo namespace end
