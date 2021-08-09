@@ -23,6 +23,8 @@ struct TiledMapTraits<::evo::TiledMap<T>> {
 	using ConstIterator  = typename TiledMap<T>::ConstIterator;
 	using ProxyRow       = typename TiledMap<T>::ProxyRow;
 	using ConstProxyRow  = typename TiledMap<T>::ConstProxyRow;
+
+	static constexpr bool is_map_const() { return false; }
 };
 
 /* const map traits */
@@ -40,6 +42,8 @@ struct TiledMapTraits<const ::evo::TiledMap<T>> {
 	using ConstIterator  = typename TiledMap<T>::ConstIterator;
 	using ProxyRow       = typename TiledMap<T>::ConstProxyRow;
 	using ConstProxyRow  = typename TiledMap<T>::ConstProxyRow;
+
+	static constexpr bool is_map_const() { return true; }
 };
 
 } // detail namespace end

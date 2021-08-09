@@ -68,53 +68,35 @@ TEST_CASE("region in region static assertions", "[TiledMap]") {
 	);
 }
 
-// TEST_CASE("iterators static assertions", "[TiledMap]") {
-// 	using Map = evo::TiledMap<int>;
-// 	using Region = typename Map::Region;
-// 	using ConstRegion = typename Map::ConstRegion;
+TEST_CASE("iterators static assertions", "[TiledMap]") {
+	using Map = evo::TiledMap<int>;
+	using Region = typename Map::Region;
+	using ConstRegion = typename Map::ConstRegion;
 
-// 	static_assert(!is_readonly<
-// 		decltype(*std::declval<Region>().begin())
-// 		>::value,
-// 		"non const range, non const iterator, but value is readonly"
-// 	);
+	static_assert(!is_readonly<
+		decltype(*std::declval<Region>().begin())
+		>::value,
+		"non const range, non const iterator, but value is readonly"
+	);
 
-// 	static_assert(is_readonly<
-// 		decltype(*std::declval<Region>().cbegin())
-// 		>::value,
-// 		"const iterator, but value is not readonly"
-// 	);
+	static_assert(is_readonly<
+		decltype(*std::declval<Region>().cbegin())
+		>::value,
+		"const iterator, but value is not readonly"
+	);
 
-// 	static_assert(is_readonly<
-// 		decltype(*std::declval<const Region>().begin())
-// 		>::value,
-// 		"const range, but value is not readonly"
-// 	);
+	static_assert(is_readonly<
+		decltype(*std::declval<ConstRegion>().begin())
+		>::value,
+		"const range, but value is not readonly"
+	);
 
-// 	static_assert(is_readonly<
-// 		decltype(*std::declval<const Region>().cbegin())
-// 		>::value,
-// 		"const range, const iterator, but value is not readonly"
-// 	);
-
-// 	/* Note. const Region != ConstRegion */
-// 	static_assert(std::is_same_v<
-// 		typename ConstRegion::Iterator::reference,
-// 		int&
-// 	>);
-
-// 	// static_assert(is_readonly<
-// 	// 	decltype(*std::declval<ConstRegion>().begin())
-// 	// 	>::value,
-// 	// 	"const range, but value is not readonly"
-// 	// );
-
-// 	static_assert(is_readonly<
-// 		decltype(*std::declval<ConstRegion>().cbegin())
-// 		>::value,
-// 		"const range, const iterator, but value is not readonly"
-// 	);
-// }
+	static_assert(is_readonly<
+		decltype(*std::declval<ConstRegion>().cbegin())
+		>::value,
+		"const range, const iterator, but value is not readonly"
+	);
+}
 
 TEST_CASE("TiledMap::TiledMap()", "[TiledMap]") {
 	evo::TiledMap<int> map{5, 10};
@@ -157,6 +139,8 @@ TEST_CASE("TiledMap::Region::operator[]()", "[TiledMap]") {
 	CHECK(view[4][11] == 337);
 }
 
+/* Just for test. Never do so, there are
+ * iterators in TiledMap and Region for these purposes */
 template <class Region, class InputIt>
 void fill_region(Region&& dst_region, InputIt src_fst, InputIt src_last)
 {
@@ -169,6 +153,8 @@ void fill_region(Region&& dst_region, InputIt src_fst, InputIt src_last)
 		}
 }
 
+/* Just for test. Never do so, there are
+ * iterators in TiledMap and Region for these purposes */
 template <class ConstRegion, class InputIt>
 void cmp_region(ConstRegion&& region, InputIt fst, InputIt last)
 {
@@ -190,6 +176,7 @@ TEST_CASE("TiledMap accessors", "[TiledMap]") {
 		0,  0,  9,  10, 11, 12, 0,
 		0,  0,  0,  0,  0,  0,  0
 	};
+
 	std::array<int, 12> filling;
 	std::iota(filling.begin(), filling.end(), 1);
 
@@ -199,8 +186,31 @@ TEST_CASE("TiledMap accessors", "[TiledMap]") {
 }
 
 TEST_CASE("RegionAccess iterators", "[TiledMap]") {
+	std::array<int, 35> expected{
+		0,  0,  0,  0,  0,  0,  0,
+		0,  0,  1,  2,  3,  4,  0,
+		0,  0,  5,  6,  7,  8,  0,
+		0,  0,  9,  10, 11, 12, 0,
+		0,  0,  0,  0,  0,  0,  0
+	};
+	
 	evo::TiledMap<int> map{5, 7};
-	// // auto begin = map.access_whole().begin();
-	// auto end = map.access_whole().end();
+	auto&& access = map.access(1, 2).cut(3, 4);
 
+	std::iota(access.begin(), access.end(), 1);
+	cmp_region(map, expected.begin(), expected.end());
+}
+
+TEST_CASE("RegionAccess to ConstRegionAccess", "[TiledMap]") {
+	evo::TiledMap<int> map{5, 7};
+	evo::TiledMap<int>::ConstRegion const_access = map.access_whole();
+	std::iota(map.begin(), map.end(), 0);
+	cmp_region(const_access, const_access.begin(), const_access.end());
+}
+
+TEST_CASE("Iterator to ConstIterator", "[TiledMap]") {
+	evo::TiledMap<int> map{5, 7};
+	evo::TiledMap<int>::ConstIterator fst = map.access_whole().begin();
+	evo::TiledMap<int>::ConstIterator last = map.access_whole().end();
+	CHECK(std::distance(fst, last) == 35);
 }

@@ -1,3 +1,5 @@
+/* This is the main file for TiledMap. It includes all others */
+
 #pragma once
 
 #include "RegionAccess.h"
@@ -64,11 +66,8 @@ public:
 	 * row, then moving to the begining of the next row and so on
 	 * until the end
 	 *  Iterators are both implemented for TiledMap itself and Region-s */
-//	using Iterator = detail::RegionIterator<TiledMap>;
-//	using ConstIterator = detail::RegionIterator<const TiledMap>;
-	using Iterator = int *;
-	using ConstIterator = const int *;
-
+	using Iterator = detail::RegionIterator<TiledMap>;
+	using ConstIterator = detail::RegionIterator<const TiledMap>;
 
 private:
 	using ProxyRow = detail::ProxyRow<TileType>;
@@ -99,6 +98,15 @@ public:
 
 	ProxyRow operator [](size_t row);
 	ConstProxyRow operator [](size_t row) const;
+
+	Iterator begin() { return access_whole().begin(); }
+	Iterator end() { return access_whole().end(); }
+
+	ConstIterator begin() const { return cbegin(); }
+	ConstIterator end() const { return cend(); }
+
+	ConstIterator cbegin() const { return access_whole().begin(); }
+	ConstIterator cend() const { return access_whole().end(); }
 
 private:
 	StorageType m_data;
