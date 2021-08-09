@@ -21,13 +21,8 @@ void TiledGameModel::kill_object(IGameObject& object)
 {
 	assert(object.game_model() == this && "object is not attached to this game model");
 
-	// TODO: it could be refactored, but I'm not sure if it will
-	for (size_t row = 0; row < m_map.height(); ++row)
-		for (size_t column = 0; column < m_map.width(); ++column) {
-			auto& tile = m_map[row][column];
-			assert(tile == &object);
-			tile = nullptr;
-		}
+	std::replace(m_map.begin(), m_map.end(), &object, static_cast<IGameObject *>(nullptr));
+
 	m_objects.erase(
 		std::find(m_objects.begin(), m_objects.end(), &object)
 	);
