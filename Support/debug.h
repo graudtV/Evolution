@@ -5,7 +5,7 @@
 namespace evo {
 
 template <class To, class From>
-To save_dynamic_cast(From *from)
+To safe_dynamic_cast(From *from)
 {
 	To res = dynamic_cast<To>(from);
 	if (!res) {
@@ -26,5 +26,5 @@ To save_dynamic_cast(From *from)
 #ifdef NDEBUG
 # define cast static_cast
 #else
-# define cast ::evo::save_dynamic_cast
+# define cast ::evo::safe_dynamic_cast
 #endif
