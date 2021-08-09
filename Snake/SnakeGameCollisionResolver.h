@@ -7,6 +7,7 @@ namespace evo {
 namespace snake {
 
 class IGameObject;
+class Snake;
 
 /* Collision resolver for snake-only game.
  * If there are any other objects in game model except
@@ -28,7 +29,12 @@ public:
 
 	void resolve_collisions(TiledGameModel& model) override;
 private:
-    TiledMap<std::vector<IGameObject *>> m_collision_map;
+    using ObjectIdx = unsigned;
+    TiledMap<std::vector<ObjectIdx>> m_collision_map;
+    std::vector<bool> m_is_object_killed;
+    std::vector<IGameObject *> m_to_be_killed;
+
+    void fill_collision_map(TiledGameModel& model);
 };
 
 } // snake namespace end
