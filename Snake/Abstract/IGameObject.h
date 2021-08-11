@@ -15,7 +15,7 @@ public:
 
 	const TiledGameModel *game_model() const { return m_game_model; }
 private:
-	const TiledGameModel *m_game_model;
+	const TiledGameModel *m_game_model = nullptr;
 
 	friend class TiledGameModel;
 };

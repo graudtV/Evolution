@@ -7,6 +7,7 @@ add_executable(snake)
 target_sources(snake PRIVATE
 	Abstract/IGameModelNotifications.cpp
 	Abstract/TiledGameModel.cpp
+	Finalizers/FinalizeOnDeath.cpp
 	main.cpp
 	ISnakeKernel.cpp
 	Snake.cpp
