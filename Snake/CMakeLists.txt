@@ -8,6 +8,7 @@ target_sources(snake PRIVATE
 	Abstract/IGameModelNotifications.cpp
 	Abstract/TiledGameModel.cpp
 	Finalizers/FinalizeOnDeath.cpp
+	Finalizers/FinalizeIfNObjectsRemain.cpp
 	main.cpp
 	ISnakeKernel.cpp
 	Snake.cpp
